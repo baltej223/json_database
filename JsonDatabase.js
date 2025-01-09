@@ -11,7 +11,7 @@ class JsonDatabase {
         this.name = name;
     }
 
-    createDatabase() {
+    create_database() {
         const databaseFolder = path.join(this.location, "database");
         if (!fs.existsSync(databaseFolder)) {
             fs.mkdirSync(databaseFolder);
@@ -29,7 +29,7 @@ class JsonDatabase {
         }
     }
 
-    readRawDatabase() {
+    read_raw_database() {
         const databaseFolder = path.join(this.location, "database");
         const filePath = path.join(databaseFolder, this.name + ".json");
         try {
@@ -39,7 +39,7 @@ class JsonDatabase {
         }
     }
 
-    readDatabase() {
+    read_database() {
         const content = this.readRawDatabase();
         try {
             return JSON.parse(content);
@@ -48,7 +48,7 @@ class JsonDatabase {
         }
     }
 
-    insertInto(key, data) {
+    insert_into(key, data) {
         const existingData = this.readDatabase();
 
         if (key in existingData) {
@@ -60,7 +60,7 @@ class JsonDatabase {
         console.info(`Inserted data into '${key}' in database '${this.name}'.`);
     }
 
-    deleteDatabase() {
+    delete_database() {
         const databaseFolder = path.join(this.location, "database");
         const filePath = path.join(databaseFolder, this.name + ".json");
         try {
@@ -75,7 +75,7 @@ class JsonDatabase {
         }
     }
 
-    deleteKey(key) {
+    delete_key(key) {
         const existingData = this.readDatabase();
         if (!(key in existingData)) {
             throw new Error(`Key '${key}' not found in the database '${this.name}'.`);
@@ -102,7 +102,7 @@ class JsonDatabase {
         console.info(`Updated data for key '${key}' in database '${this.name}'.`);
     }
 
-    writeJson(pythonDict) {
+    write_json(pythonDict) {
         const databaseFolder = path.join(this.location, "database");
         const filePath = path.join(databaseFolder, this.name + ".json");
         try {
@@ -135,7 +135,7 @@ class JsonDatabase {
             }
         }
 
-        const existingData = this.readDatabase();
+        const existing_data = this.readDatabase();
         const df = pd.DataFrame(existingData);
         if (toshowORtoreturn === "show") {
             console.log(df);
@@ -146,9 +146,9 @@ class JsonDatabase {
 }
 
 // Example usage
-const db = new JsonDatabase(".", "example");
-db.createDatabase();
-db.insertInto("key1", { field1: "value1" });
-console.log(db.readDatabase());
-db.deleteKey("key1");
-db.deleteDatabase();
+// const db = new JsonDatabase(".", "example");
+// db.createDatabase();
+// db.insertInto("key1", { field1: "value1" });
+// console.log(db.readDatabase());
+// db.deleteKey("key1");
+// db.deleteDatabase();
