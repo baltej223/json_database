@@ -1,6 +1,6 @@
 # Json Database Management
 
-`JsonDatabase` is a lightweight JSON database management system written in Python. It treats json files as database files. It provides a simple way to create, read, update, and delete JSON databases. It also helps to visualise data using python library `pandas`
+`JsonDatabase` is a lightweight JSON database management system written in Python and nodejs. It treats json files as database files. It provides a simple way to create, read, update, and delete JSON databases. It also helps to visualise data pandas (python) or pandas-js for node-js
 
 ## Features
 
