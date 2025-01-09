@@ -134,7 +134,7 @@ db.update("user1", {"age": 31})
 # Show data
 db.show(toshowORtoreturn="show")
 
-# Delete key
+#  Delete key
 db.delete_key("user1")
 
 # Delete database
