@@ -150,6 +150,11 @@ Here is the documentation for the `JsonDatabase` class:
 
 `JsonDatabase` is a class that provides methods to interact with a JSON-based database stored in a file. The database is created, read, updated, and deleted using the provided methods. Each database is a JSON file stored in a specified directory.
 
+- First you have to install jsonfile dependency by executing the following command.
+```
+npm i jsonfile
+```
+
 ### Constructor
 
 ```javascript
