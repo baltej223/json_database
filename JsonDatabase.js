@@ -13,9 +13,14 @@ class JsonDatabase {
 
     create_database() {
         const databaseFolder = path.join(this.location, "database");
-        if (!fs.existsSync(databaseFolder)) {
-            fs.mkdirSync(databaseFolder);
+        try {
+            // Ensure the entire directory path exists
+            fs.mkdirSync(databaseFolder, { recursive: true });
+            console.info(`Created directory at '${databaseFolder}'`);
+        } catch (e) {
+            throw new DatabaseError(`Error creating directory '${databaseFolder}': ${e}`);
         }
+
         const filePath = path.join(databaseFolder, this.name + ".json");
         if (!fs.existsSync(filePath)) {
             try {
@@ -40,7 +45,7 @@ class JsonDatabase {
     }
 
     read_database() {
-        const content = this.readRawDatabase();
+        const content = this.read_raw_database();
         try {
             return JSON.parse(content);
         } catch (e) {
@@ -49,14 +54,14 @@ class JsonDatabase {
     }
 
     insert_into(key, data) {
-        const existingData = this.readDatabase();
+        const existingData = this.read_database();
 
         if (key in existingData) {
             console.warn(`Key '${key}' already exists in database '${this.name}'. Overwriting existing data.`);
         }
 
         existingData[key] = data;
-        this.writeJson(existingData);
+        this.write_json(existingData);
         console.info(`Inserted data into '${key}' in database '${this.name}'.`);
     }
 
@@ -76,17 +81,17 @@ class JsonDatabase {
     }
 
     delete_key(key) {
-        const existingData = this.readDatabase();
+        const existingData = this.read_database();
         if (!(key in existingData)) {
             throw new Error(`Key '${key}' not found in the database '${this.name}'.`);
         }
         delete existingData[key];
-        this.writeJson(existingData);
+        this.write_json(existingData);
         console.info(`Deleted key '${key}' from database '${this.name}'.`);
     }
 
     update(key, newData) {
-        const existingData = this.readDatabase();
+        const existingData = this.read_database();
 
         if (!(key in existingData)) {
             throw new Error(`Key '${key}' not found in the database '${this.name}'.`);
@@ -98,15 +103,15 @@ class JsonDatabase {
             existingData[key] = newData;
         }
 
-        this.writeJson(existingData);
+        this.write_json(existingData);
         console.info(`Updated data for key '${key}' in database '${this.name}'.`);
     }
 
-    write_json(pythonDict) {
+    write_json(data) {
         const databaseFolder = path.join(this.location, "database");
         const filePath = path.join(databaseFolder, this.name + ".json");
         try {
-            jsonfile.writeFileSync(filePath, pythonDict, { spaces: 2 });
+            jsonfile.writeFileSync(filePath, data, { spaces: 2 });
         } catch (e) {
             throw new DatabaseError(`Error writing at database '${this.name}': ${e}`);
         }
@@ -135,8 +140,8 @@ class JsonDatabase {
             }
         }
 
-        const existing_data = this.readDatabase();
-        const df = pd.DataFrame(existingData);
+        const existing_data = this.read_database();
+        const df = pd.DataFrame(existing_data);
         if (toshowORtoreturn === "show") {
             console.log(df);
         } else if (toshowORtoreturn === "return") {
@@ -145,10 +150,4 @@ class JsonDatabase {
     }
 }
 
-// Example usage
-// const db = new JsonDatabase(".", "example");
-// db.createDatabase();
-// db.insertInto("key1", { field1: "value1" });
-// console.log(db.readDatabase());
-// db.deleteKey("key1");
-// db.deleteDatabase();
+module.exports = JsonDatabase;
